@@ -12,6 +12,11 @@ const App = () => {
 
       ctx.fillStyle = "#fff";
       ctx.fillRect(150, 150, 30, 30);
+
+      // way 2 for rect
+      ctx.fillStyle = "yellow";
+      ctx.rect(200, 200, 15, 15);
+      ctx.fill();
     }
   }, []);
 
