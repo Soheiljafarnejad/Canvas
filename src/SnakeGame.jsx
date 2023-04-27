@@ -1,79 +1,77 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const SnakeGame = () => {
   const canvas = useRef(null);
   const ctxRef = useRef(null);
   const scaleX = useRef(0);
   const scaleY = useRef(0);
-  const direction = useRef("");
-  const [value, setValue] = useState(null);
+  const speedX = useRef(0);
+  const speedY = useRef(0);
+  const size = 20;
 
   useEffect(() => {
     if (canvas.current.getContext) ctxRef.current = canvas.current.getContext("2d");
   }, []);
 
-  useEffect(() => {
+  const snakeDraw = useCallback(() => {
     const ctx = ctxRef.current;
-
     ctx.fillStyle = "black";
-    const width = canvas.current.width;
-    const height = canvas.current.height;
-    ctx.fillRect(scaleX.current, scaleY.current, 20, 20);
+    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+    ctx.fillRect(scaleX.current, scaleY.current, size, size);
+  }, []);
 
+  const updateLocation = useCallback(() => {
+    scaleY.current += speedY.current;
+    scaleX.current += speedX.current;
+
+    if (scaleY.current > canvas.current.height) scaleY.current = 0;
+    else if (scaleY.current < 0) scaleY.current = canvas.current.height;
+    if (scaleX.current > canvas.current.width) scaleX.current = 0;
+    else if (scaleX.current < 0) scaleX.current = canvas.current.width;
+  }, []);
+
+  const updateDirection = useCallback((value) => {
     switch (value) {
-      case "up":
-        scaleY.current -= 20;
-        direction.current = "-Y";
+      case "ArrowUp":
+        speedX.current = 0;
+        speedY.current = -size;
         break;
-      case "down":
-        scaleY.current += 20;
-        direction.current = "+Y";
+      case "ArrowDown":
+        speedX.current = 0;
+        speedY.current = size;
         break;
-      case "left":
-        scaleX.current -= 20;
-        direction.current = "-X";
-
+      case "ArrowLeft":
+        speedY.current = 0;
+        speedX.current = -size;
         break;
-      case "right":
-        scaleX.current += 20;
-        direction.current = "+X";
-
+      case "ArrowRight":
+        speedY.current = 0;
+        speedX.current = size;
         break;
       default:
         return;
     }
-
-    if (value) {
-      const interval = setInterval(() => {
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillRect(scaleX.current, scaleY.current, 20, 20);
-        if (direction.current.includes("X")) {
-          if (scaleX.current > width) scaleX.current = 0;
-          else if (scaleX.current < 0) scaleX.current = width;
-          else direction.current === "+X" ? (scaleX.current += 20) : (scaleX.current -= 20);
-        }
-        if (direction.current.includes("Y")) {
-          if (scaleY.current > height) scaleY.current = 0;
-          else if (scaleY.current < 0) scaleY.current = height;
-          else direction.current === "+Y" ? (scaleY.current += 20) : (scaleY.current -= 20);
-        }
-      }, 150);
-      return () => clearInterval(interval);
-    }
-  }, [value]);
+  }, []);
 
   useEffect(() => {
+    snakeDraw();
+    const myInterval = setInterval(() => {
+      updateLocation();
+      snakeDraw();
+    }, 200);
+
     document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowUp") setValue("up");
-      else if (e.key === "ArrowDown") setValue("down");
-      else if (e.key === "ArrowLeft") setValue("left");
-      else if (e.key === "ArrowRight") setValue("right");
+      updateDirection(e.key);
     });
-  }, []);
+
+    return () => clearInterval(myInterval);
+  }, [snakeDraw, updateLocation, updateDirection]);
+
+  useEffect(() => {}, []);
 
   return (
     <div className="flex items-center justify-center min-h-[100svh]">
-      <canvas className="bg-gray-300" width={400} height={400} ref={canvas}></canvas>
+      <canvas className="bg-gray-300" width={400} height={300} ref={canvas}></canvas>
     </div>
   );
 };
