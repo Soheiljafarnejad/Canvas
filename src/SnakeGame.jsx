@@ -91,8 +91,8 @@ const SnakeGame = () => {
     });
 
     const myInterval = setInterval(() => {
-      eatFood();
       updateSnakeLocation();
+      eatFood();
       snakeDraw();
       foodDraw();
     }, 200);
