@@ -39,11 +39,8 @@ const SnakeGame = () => {
   }, []);
 
   const updateSnakeLocation = useCallback(() => {
-    snakeSize.current[total.current - 1] = { x: snakeX.current, y: snakeY.current };
-
-    for (let i = 0; i < snakeSize.current.length - 1; i++) {
-      snakeSize.current[i] = snakeSize.current[i + 1];
-    }
+    if (total.current) snakeSize.current[total.current - 1] = { x: snakeX.current, y: snakeY.current };
+    for (let i = 0; i < snakeSize.current.length - 1; i++) snakeSize.current[i] = snakeSize.current[i + 1];
 
     snakeY.current += speedY.current;
     snakeX.current += speedX.current;
@@ -94,8 +91,8 @@ const SnakeGame = () => {
     });
 
     const myInterval = setInterval(() => {
-      updateSnakeLocation();
       eatFood();
+      updateSnakeLocation();
       snakeDraw();
       foodDraw();
     }, 200);
