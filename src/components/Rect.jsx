@@ -1,13 +1,10 @@
 import { useEffect, useRef } from "react";
+import Canvas from "../common/Canvas";
 
 const Rect = () => {
   const canvas = useRef(null);
   const ctxRef = useRef(null);
-
-  useEffect(() => {
-    if (canvas.current.getContext) ctxRef.current = canvas.current.getContext("2d");
-  }, []);
-
+  
   useEffect(() => {
     const ctx = ctxRef.current;
     ctx.fillStyle = "red";
@@ -24,7 +21,7 @@ const Rect = () => {
   }, []);
   return (
     <div className="flex items-center justify-center min-h-[100svh]">
-      <canvas className="bg-gray-300" width={500} height={500} ref={canvas}></canvas>;
+      <Canvas canvasRef={canvas} ctxRef={ctxRef} />
     </div>
   );
 };

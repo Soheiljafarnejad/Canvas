@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import Canvas from "../common/Canvas";
 
 const SnakeGame = () => {
   const canvas = useRef(null);
@@ -12,10 +13,6 @@ const SnakeGame = () => {
   const snakeSize = useRef([]);
   const total = useRef(0);
   const size = 15;
-
-  useEffect(() => {
-    if (canvas.current.getContext) ctxRef.current = canvas.current.getContext("2d");
-  }, []);
 
   const foodDraw = useCallback(() => {
     const ctx = ctxRef.current;
@@ -101,7 +98,7 @@ const SnakeGame = () => {
 
   return (
     <div className="flex items-center justify-center min-h-[100svh]">
-      <canvas className="bg-gray-300" width={300} height={300} ref={canvas}></canvas>
+      <Canvas canvasRef={canvas} ctxRef={ctxRef} width={300} height={300} />
     </div>
   );
 };
