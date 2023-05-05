@@ -10,11 +10,16 @@ const Stroke = () => {
 
     // way 1
     ctx.strokeStyle = "yellow";
-    ctx.strokeRect(25, 25, 100, 100);
+    ctx.strokeRect(25, 25, 50, 50);
 
     // way 2
+    ctx.lineWidth = 10;
+    ctx.lineJoin = "bevel"; // miter(default) , bevel , round
+    ctx.shadowColor = "red";
+    ctx.shadowBlur = 20;
+
     ctx.strokeStyle = "green";
-    ctx.rect(150, 150, 30, 30);
+    ctx.rect(150, 150, 100, 100);
     ctx.stroke();
   }, []);
 

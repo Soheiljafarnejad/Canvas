@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import Canvas from "../common/Canvas";
+import Canvas from "../../common/Canvas";
 
 const SnakeGame = () => {
   const canvas = useRef(null);
